@@ -134,7 +134,7 @@ export class AppComponent implements OnInit {
   @Handle('CARD_CLICKED') onCardClicked(_: Event, news: HackerNewsItemFull): void {
     this.state.setState({ ...this.state.value, loadingCurrentNewsItem: true });
 
-    const state = this.hackerNews.getNewsItem(news.id).then(currentNewsItem => ({
+    const state: Promise<AppState> = this.hackerNews.getNewsItem(news.id).then(currentNewsItem => ({
       ...this.state.value,
       currentNewsItem,
       loadingCurrentNewsItem: false
