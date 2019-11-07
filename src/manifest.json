@@ -3,7 +3,7 @@
   "short_name": "lit-kit-hn",
   "start_url": "/",
   "display": "standalone",
-  "theme_color": "#b30283",
+  "theme_color": "#ff6600",
   "background_color": "#fff",
   "description": "Web Components PWA build with lit-kit",
   "icons": [
