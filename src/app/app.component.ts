@@ -56,6 +56,8 @@ export interface AppState {
 
       comments-drawer {
         animation: drawerEnter 0.2s;
+        max-width: 1200px;
+        margin: 0 auto;
         position: fixed;
         left: 0;
         right: 0;
