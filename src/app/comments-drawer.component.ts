@@ -78,6 +78,7 @@ interface CommentsDrawerState {
                 <div><b>${comment.user}</b> ${comment.time_ago}</div>
 
                 <div .innerHTML=${comment.content}></div>
+
                 <hr />
               </div>
             `
