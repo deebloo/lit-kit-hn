@@ -18,6 +18,25 @@ export interface AppState {
   currentNewsItem?: HackerNewsItemFull;
 }
 
+const displayLoader = (state: AppState) => {
+  if (state.loadingCurrentNewsItem || state.loadingNews) {
+    return html`
+      <app-loader></app-loader>
+    `;
+  }
+};
+
+const displayConmmentDrawer = (state: AppState, run: Function) => {
+  if (state.currentNewsItem) {
+    return html`
+      <comments-drawer
+        .comments=${state.currentNewsItem.comments}
+        @close_drawer=${run('CLOSE_DRAWER')}
+      ></comments-drawer>
+    `;
+  }
+};
+
 @Component<AppState>({
   tag: 'app-root',
   defaultState: { loadingNews: false, news: [], loadingCurrentNewsItem: false },
@@ -76,19 +95,7 @@ export interface AppState {
   `,
   template(state, run) {
     return html`
-      ${state.loadingNews || state.loadingCurrentNewsItem
-        ? html`
-            <app-loader></app-loader>
-          `
-        : ''}
-      ${state.currentNewsItem
-        ? html`
-            <comments-drawer
-              .comments=${state.currentNewsItem.comments}
-              @close_drawer=${run('CLOSE_DRAWER')}
-            ></comments-drawer>
-          `
-        : ''}
+      ${displayLoader(state)} ${displayConmmentDrawer(state, run)}
 
       <div class="cards">
         ${state.news.map(news =>
