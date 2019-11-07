@@ -1,6 +1,6 @@
 import './loader.component';
 
-import { Component, State, CompState, OnInit, Handle, ElRef } from '@lit-kit/component';
+import { Component, State, CompState, OnInit, Handle } from '@lit-kit/component';
 import { html, nothing } from 'lit-html';
 import { until } from 'lit-html/directives/until';
 
@@ -112,7 +112,6 @@ export interface AppState {
 export class AppComponent implements OnInit {
   constructor(
     @State() private state: CompState<AppState>,
-    @ElRef() private elRef: HTMLElement,
     @HackerNews() private hackerNews: HackerNewsService
   ) {}
 
@@ -124,10 +123,6 @@ export class AppComponent implements OnInit {
       .then(news => ({ ...this.state.value, news, loadingNews: false }));
 
     this.state.setState(state);
-
-    this.elRef.addEventListener('animationend', (e: AnimationEvent) => {
-      console.log(e);
-    });
   }
 
   @Handle('CARD_CLICKED') onCardClicked(_: Event, news: HackerNewsItemFull): void {
