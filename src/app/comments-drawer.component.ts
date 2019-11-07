@@ -28,7 +28,8 @@ interface CommentsDrawerState {
         align-items: center;
         background: var(--color-primary);
         box-shadow: 0 2px 3px rgba(0, 0, 0, 0.23);
-        padding: 1rem;
+        height: var(--header-height);
+        padding: 0 1rem;
         font-size: 1.5rem;
         color: #fff;
         z-index: 1;
@@ -57,7 +58,7 @@ interface CommentsDrawerState {
         left: 0;
         right: 0;
         bottom: 0;
-        top: 60px;
+        top: var(--header-height);
         word-wrap: break-word;
       }
     </style>

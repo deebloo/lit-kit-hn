@@ -22,6 +22,7 @@ type NewsCardState = HackerNewsItem | null;
       }
 
       h3 {
+        font-size: 1.1rem;
         margin: 0 0 1.5rem 0;
       }
 

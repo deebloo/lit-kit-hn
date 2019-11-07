@@ -19,6 +19,7 @@
       :root {
         --color-primary: rgb(255, 102, 0);
         --color-secondary: rgb(246, 246, 239);
+        --header-height: 50px;
       }
 
       html,
@@ -37,11 +38,14 @@
       }
 
       header {
+        align-items: center;
         background: var(--color-primary);
         box-shadow: 0 2px 3px rgba(0, 0, 0, 0.23);
-        padding: 1rem;
-        font-size: 1.5rem;
         color: #fff;
+        display: flex;
+        height: var(--header-height);
+        padding: 0 1rem;
+        font-size: 1.5rem;
         position: relative;
         z-index: 1000;
       }
