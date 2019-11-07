@@ -11,10 +11,10 @@ type NewsCardState = HackerNewsItem | null;
   style: html`
     <style>
       :host {
-        background: rgba(255, 255, 255, 0.8);
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         display: block;
         padding: 1rem 1.5rem;
+        background: rgba(255, 255, 255, 0.8);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
       }
 
       .card-content {
@@ -23,6 +23,9 @@ type NewsCardState = HackerNewsItem | null;
 
       h3 {
         margin: 0 0 1.5rem 0;
+      }
+
+      h3 a {
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -46,15 +49,15 @@ type NewsCardState = HackerNewsItem | null;
     }
 
     return html`
-      <a href=${state.url}>
-        <h3>${state.title}</h3>
+      <h3>
+        <a href=${state.url}>${state.title}</a>
+      </h3>
 
-        <div class="card-content">
-          <p>${state.points} <b>points</b> by <b>${state.user}</b> ${state.time_ago}</p>
+      <div class="card-content">
+        <p>${state.points} <b>points</b> by <b>${state.user}</b> ${state.time_ago}</p>
 
-          ${state.comments_count} comments
-        </div>
-      </a>
+        ${state.comments_count} comments
+      </div>
     `;
   }
 })

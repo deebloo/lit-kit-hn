@@ -1,36 +1,51 @@
 import './loader.component';
 
-import { Component, State, CompState, OnInit } from '@lit-kit/component';
+import { Component, State, CompState, OnInit, Handle } from '@lit-kit/component';
 import { html } from 'lit-html';
 import { until } from 'lit-html/directives/until';
 
-import { HackerNewsService, HackerNewsItem, HackerNews } from './hacker-news.service';
+import {
+  HackerNewsService,
+  HackerNewsItem,
+  HackerNews,
+  HackerNewsItemFull
+} from './hacker-news.service';
 
 export interface AppState {
-  loading: boolean;
+  loadingNews: boolean;
   news: HackerNewsItem[];
+  loadingCurrentNewsItem: boolean;
+  currentNewsItem?: HackerNewsItemFull;
 }
 
 @Component<AppState>({
   tag: 'app-root',
-  defaultState: { loading: false, news: [] },
+  defaultState: { loadingNews: false, news: [], loadingCurrentNewsItem: false },
   style: html`
     <style>
       :host {
         display: block;
         max-width: 1200px;
         margin: 0 auto;
+        padding-top: 60px;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        overflow-y: auto;
       }
 
       news-card,
       .placeholder-card {
-        animation: cardEnter 0.4s;
         margin-bottom: 0.75rem;
       }
 
       app-loader {
-        display: block;
-        margin: 2rem auto;
+        position: fixed;
+        top: 24px;
+        z-index: 1000;
+        right: 24px;
       }
 
       .placeholder-card {
@@ -39,38 +54,57 @@ export interface AppState {
         height: 130px;
       }
 
-      @keyframes cardEnter {
-        0% {
-          opacity: 0;
-          transform: translateY(-5%);
-        }
+      comments-drawer {
+        animation: drawerEnter 0.2s;
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        z-index: 1001;
+      }
 
+      @keyframes drawerEnter {
+        0% {
+          transform: translateY(100%);
+        }
         100% {
-          opacity: 1;
           transform: translateY(0);
         }
       }
     </style>
   `,
-  template(state) {
+  template(state, run) {
     return html`
-      ${state.loading
+      ${state.loadingNews || state.loadingCurrentNewsItem
         ? html`
             <app-loader></app-loader>
           `
-        : state.news.map(news =>
-            until(
-              import('./news-card.component').then(
-                () =>
-                  html`
-                    <news-card .newsItem=${news}></news-card>
-                  `
-              ),
-              html`
-                <div class="placeholder-card"></div>
-              `
-            )
-          )}
+        : ''}
+      ${state.currentNewsItem
+        ? html`
+            <comments-drawer
+              .comments=${state.currentNewsItem.comments}
+              @close_drawer=${run('CLOSE_DRAWER')}
+            ></comments-drawer>
+          `
+        : ''}
+
+      <div class="cards">
+        ${state.news.map(news =>
+          until(
+            import('./news-card.component').then(
+              () =>
+                html`
+                  <news-card .newsItem=${news} @click=${run('CARD_CLICKED', news)}></news-card>
+                `
+            ),
+            html`
+              <div class="placeholder-card"></div>
+            `
+          )
+        )}
+      </div>
     `;
   }
 })
@@ -80,11 +114,31 @@ export class AppComponent implements OnInit {
     @HackerNews() private hackerNews: HackerNewsService
   ) {}
 
-  onInit() {
-    this.state.setState({ loading: true, news: [] });
+  onInit(): void {
+    this.state.setState({ ...this.state.value, loadingNews: true });
 
-    const state = this.hackerNews.getNews().then(news => ({ news, loading: false }));
+    const state: Promise<AppState> = this.hackerNews
+      .getNews()
+      .then(news => ({ ...this.state.value, news, loadingNews: false }));
 
     this.state.setState(state);
+  }
+
+  @Handle('CARD_CLICKED') onCardClicked(_: Event, news: HackerNewsItemFull): void {
+    this.state.setState({ ...this.state.value, loadingCurrentNewsItem: true });
+
+    const state = this.hackerNews.getNewsItem(news.id).then(currentNewsItem => ({
+      ...this.state.value,
+      currentNewsItem,
+      loadingCurrentNewsItem: false
+    }));
+
+    this.state.setState(
+      Promise.all([state, import('./comments-drawer.component')]).then(res => res[0])
+    );
+  }
+
+  @Handle('CLOSE_DRAWER') onCloseDrawer(_: CustomEvent): void {
+    this.state.setState({ ...this.state.value, currentNewsItem: undefined });
   }
 }

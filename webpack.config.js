@@ -1,6 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const { GenerateSW } = require('workbox-webpack-plugin');
 
 const plugins = [
@@ -42,5 +43,15 @@ module.exports = {
       index: 'src/index.html'
     }
   },
-  plugins
+  plugins,
+  optimization: {
+    minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        cache: true,
+        parallel: true,
+        terserOptions: { output: { comments: false } }
+      })
+    ]
+  }
 };

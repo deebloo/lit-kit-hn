@@ -9,16 +9,17 @@ import { html } from 'lit-html';
       :host {
         display: inline-block;
         position: relative;
-        width: 64px;
-        height: 64px;
+        width: 57px;
+        height: 11px;
       }
+
       :host div {
         position: absolute;
-        top: 27px;
+        top: 0;
         width: 11px;
         height: 11px;
         border-radius: 50%;
-        background: var(--color-primary);
+        background: #fff;
         animation-timing-function: cubic-bezier(0, 1, 1, 0);
       }
       :host div:nth-child(1) {
