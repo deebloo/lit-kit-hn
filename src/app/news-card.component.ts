@@ -13,7 +13,7 @@ type NewsCardState = HackerNewsItem | null;
       :host {
         display: block;
         padding: 1rem 1.5rem;
-        background: rgba(255, 255, 255, 0.8);
+        background: #fff;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
       }
 
@@ -27,6 +27,7 @@ type NewsCardState = HackerNewsItem | null;
       }
 
       h3 a {
+        display: block;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -37,7 +38,6 @@ type NewsCardState = HackerNewsItem | null;
       a:hover,
       a:active,
       a:visited {
-        display: block;
         color: #000;
         cursor: pointer;
         text-decoration: none;
