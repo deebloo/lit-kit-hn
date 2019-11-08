@@ -1,7 +1,7 @@
 import './loader.component';
 
 import { Component, State, CompState, OnInit, Handle } from '@lit-kit/component';
-import { html, nothing } from 'lit-html';
+import { html } from 'lit-html';
 import { until } from 'lit-html/directives/until';
 
 import {
@@ -82,7 +82,7 @@ export interface AppState {
         ? html`
             <app-loader></app-loader>
           `
-        : nothing}
+        : ''}
 
       <div class="cards">
         ${state.news.map(news =>
@@ -107,7 +107,7 @@ export interface AppState {
               @close_drawer=${run('CLOSE_DRAWER')}
             ></comments-drawer>
           `
-        : nothing}
+        : ''}
     `;
   }
 })
